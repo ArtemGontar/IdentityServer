@@ -45,10 +45,10 @@ namespace IdentityServer
                     ClientId = "my_client_id",
                     ClientSecrets = {new Secret("my_client_secret".ToSha256())},
                     AllowedGrantTypes = GrantTypes.Code,
-                    RedirectUris = { "https://localhost:6002/signin-oidc" },
+                    RedirectUris = { "https://localhost:6002/signin-oidc", "https://localhost:5002/signin-oidc" },
                     AllowedScopes =
                     {
-                        "QuizApi",
+                        //"QuizApi",
                         IdentityServer4.IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServer4.IdentityServerConstants.StandardScopes.Profile
                     },

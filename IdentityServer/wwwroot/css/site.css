@@ -1,0 +1,140 @@
+﻿.authorization__form__container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    margin-top: 30px;
+    height: 100vh;
+}
+
+.authorization__form {
+    width: 600px;
+    height: 450px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 15px rgba(5,31,43,.05);
+    border-radius: 8px;
+}
+
+.authorization__form-input {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 10px 0;
+    width: 550px;
+    height: 80px;
+    font-size: 30px;
+}
+
+.authorization__form-input input {
+    background: #FEFBFF;
+    font-family: Avenir Next;
+    font-size: 24px;
+    border: 0;
+    width: 400px;
+    height: 45px;
+    border: 1px solid #e0e0e0;
+    box-sizing: border-box;
+    border-radius: 4px;
+}
+
+.authorization__form-input label {
+    font: 300 normal 12px/14px Roboto,sans-serif;
+    position: relative;
+    display: block;
+    color: #888d92;
+    text-align: left;
+    margin-bottom: 5px;
+    z-index: 1;
+}
+
+.authorization__form-text {
+display: flex;
+font-size: 15px;
+width: 460px;
+}
+
+.authorization__form-text div {
+        width: 50%;
+        padding-top: 10px;
+        color: #686868;
+        cursor: pointer;
+    }
+
+.authorization__form-text-rm {
+    padding-left: 20px;
+}
+
+.authorization__form-text-fp {
+    padding-right: 20px;
+    text-align: end;
+}
+
+.input__password, .input__nickname {
+     position: relative;
+}
+
+.input__password input, .input__nickname input {
+    padding-left: 60px;
+}
+
+.input__password i, .input__nickname i {
+    position: absolute;
+    left: 45px;
+    top: 25px;
+    padding: 8px 15px;
+    color: #aaa;
+    transition: 0.3s;
+}
+
+
+.input__submit input {
+    transition: all .25s ease-in;
+    font: 400 normal 16px/19px Roboto,sans-serif;
+    width: 100%;
+    max-width: 345px;
+    margin: 0 auto;
+    height: 43px;
+    border: none;
+    border-radius: 50px;
+    background-color: #feda00;
+    color: #212121;
+}
+
+.input__submit input:hover {
+    cursor: pointer;
+    background-color: #fec600;
+}
+
+.authorization_link {
+    transition: all .25s ease-in;
+    font: 400 normal 16px/19px Roboto,sans-serif;
+    width: 100%;
+    max-width: 345px;
+    margin: 0 auto;
+    height: 43px;
+    border: none;
+    border-radius: 50px;
+    background-color: #feda00;
+    color: #212121;
+    display: -ms-flexbox;
+    -ms-flex-pack: center;
+    -ms-flex-align: center;
+    display: -moz-box;
+    -moz-box-pack: center;
+    -moz-box-align: center;
+    display: -webkit-box;
+    -webkit-box-pack: center;
+    -webkit-box-align: center;
+    text-align: center;
+    text-decoration: none;
+}
+
+.authorization_link:hover {
+        cursor: pointer;
+        background-color: #fec600;
+    }

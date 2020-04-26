@@ -1,5 +1,7 @@
+using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -9,16 +11,8 @@ namespace IdentityServer
     {
         public static void Main(string[] args)
         {
+            var configuration = GetConfiguration();
             var host = CreateHostBuilder(args).Build();
-
-            using (var scope = host.Services.CreateScope())
-            {
-                var userManager = scope.ServiceProvider
-                    .GetRequiredService<UserManager<IdentityUser>>();
-
-                var user = new IdentityUser("artem");
-                userManager.CreateAsync(user, "password").GetAwaiter().GetResult();
-            }
 
             host.Run();
         }
@@ -29,5 +23,12 @@ namespace IdentityServer
                 {
                     webBuilder.UseStartup<Startup>();
                 });
+
+        private static IConfiguration GetConfiguration()
+            => new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddEnvironmentVariables()
+                .Build();
     }
 }
