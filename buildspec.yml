@@ -1,0 +1,13 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      dotnet: 3.1
+  build:
+    commands:
+      - dotnet restore
+      - dotnet build
+artifacts:
+  files:
+    - .\bin\Release\netcoreapp3.1\*
