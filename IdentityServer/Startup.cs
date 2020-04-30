@@ -7,7 +7,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Shared.Identity;
 using System;
+using HealthChecks.UI.Client;
 using IdentityServer.Data;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace IdentityServer
 {
@@ -59,6 +62,11 @@ namespace IdentityServer
                 .AddInMemoryClients(Config.GetClients())
                 .AddDeveloperSigningCredential();
 
+            
+            services.AddHealthChecks()
+                .AddCheck("self", () => HealthCheckResult.Healthy())
+                .AddMySql(connectionString, name: "DB");
+
             services.AddAuthentication(config =>
                 {
                     config.DefaultScheme = "Cookie";
@@ -101,7 +109,26 @@ namespace IdentityServer
 
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints => { endpoints.MapDefaultControllerRoute(); });
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapDefaultControllerRoute();
+
+                endpoints.MapHealthChecks("/hc", new HealthCheckOptions
+                {
+                    Predicate = _ => true,
+                    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                });
+
+                endpoints.MapHealthChecks("/liveness", new HealthCheckOptions
+                {
+                    Predicate = r => r.Name.Contains("self")
+                });
+
+                endpoints.MapHealthChecks("/readiness", new HealthCheckOptions
+                {
+                    Predicate = r => !r.Name.Contains("self")
+                });
+            });
         }
     }
 }
