@@ -27,8 +27,10 @@
     <PackageReference Include="Shared.Quiz.Identity" Version="1.0.0" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(Configuration)' == 'Debug'">
+
+  <ItemGroup>
     <ProjectReference Include="..\..\Shared\Shared.Identity\Shared.Identity.csproj" />
+    <ProjectReference Include="..\..\Shared\Shared.Persistence.MySql\Shared.Persistence.MySql.csproj" />
   </ItemGroup>
 
 </Project>

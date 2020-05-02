@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityServer", "IdentityS
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{99F1EA19-0CA7-4E2F-93C4-4DB754CD481D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared.Identity", "..\Shared\Shared.Identity\Shared.Identity.csproj", "{0D6EB6F6-A62C-49C3-843D-F2F8872B5AFC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared.Identity", "..\Shared\Shared.Identity\Shared.Identity.csproj", "{3B58A948-ECED-46E9-8DDD-286C8EE5ABFD}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared.Persistence.MySql", "..\Shared\Shared.Persistence.MySql\Shared.Persistence.MySql.csproj", "{D19CE626-B15C-436A-9CFA-201E3B4DCECC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,16 +21,21 @@ Global
 		{AF38F2DF-9E60-4079-A717-F7B0E62AB3CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AF38F2DF-9E60-4079-A717-F7B0E62AB3CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AF38F2DF-9E60-4079-A717-F7B0E62AB3CA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0D6EB6F6-A62C-49C3-843D-F2F8872B5AFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0D6EB6F6-A62C-49C3-843D-F2F8872B5AFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0D6EB6F6-A62C-49C3-843D-F2F8872B5AFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0D6EB6F6-A62C-49C3-843D-F2F8872B5AFC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3B58A948-ECED-46E9-8DDD-286C8EE5ABFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B58A948-ECED-46E9-8DDD-286C8EE5ABFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B58A948-ECED-46E9-8DDD-286C8EE5ABFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B58A948-ECED-46E9-8DDD-286C8EE5ABFD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D19CE626-B15C-436A-9CFA-201E3B4DCECC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D19CE626-B15C-436A-9CFA-201E3B4DCECC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D19CE626-B15C-436A-9CFA-201E3B4DCECC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D19CE626-B15C-436A-9CFA-201E3B4DCECC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{0D6EB6F6-A62C-49C3-843D-F2F8872B5AFC} = {99F1EA19-0CA7-4E2F-93C4-4DB754CD481D}
+		{3B58A948-ECED-46E9-8DDD-286C8EE5ABFD} = {99F1EA19-0CA7-4E2F-93C4-4DB754CD481D}
+		{D19CE626-B15C-436A-9CFA-201E3B4DCECC} = {99F1EA19-0CA7-4E2F-93C4-4DB754CD481D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {19ADB8B5-5D77-425B-8E4E-82B015CFB591}
