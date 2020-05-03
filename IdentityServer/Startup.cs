@@ -10,6 +10,7 @@ using System;
 using HealthChecks.UI.Client;
 using IdentityServer.Data;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace IdentityServer
@@ -49,12 +50,11 @@ namespace IdentityServer
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.ConfigureApplicationCookie(config =>
+            services.Configure<CookiePolicyOptions>(options =>
             {
-                config.Cookie.Name = "IdentityServer.Cookie";
-                config.LoginPath = "/Account/Login";
+                options.MinimumSameSitePolicy = SameSiteMode.Lax;
             });
-              
+
             services.AddIdentityServer()
                 .AddAspNetIdentity<ApplicationUser>()
                 .AddInMemoryApiResources(Config.GetApiResources())
@@ -62,26 +62,14 @@ namespace IdentityServer
                 .AddInMemoryClients(Config.GetClients())
                 .AddDeveloperSigningCredential();
 
-            
+            services.AddCors(options => 
+                options.AddPolicy("AllowAll", p => p.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()));
+
             services.AddHealthChecks()
                 .AddCheck("self", () => HealthCheckResult.Healthy())
                 .AddMySql(connectionString, name: "DB");
-
-            services.AddAuthentication(config =>
-                {
-                    config.DefaultScheme = "Cookie";
-                    config.DefaultChallengeScheme = "oidc";
-                })
-                .AddCookie("Cookie")
-                .AddOpenIdConnect("oidc", options =>
-                {
-                    options.ClientId = "my_client_id";
-                    options.ClientSecret = "my_client_secret";
-                    options.SaveTokens = true;
-                    options.RequireHttpsMetadata = false;
-                    options.Authority = "https://localhost:5002";
-                    options.ResponseType = "code";
-                });
 
             services.AddControllersWithViews();
 
@@ -99,15 +87,13 @@ namespace IdentityServer
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseCors("AllowAll");
+
             app.UseRouting();
 
-            app.UseStaticFiles();
-
             app.UseIdentityServer();
-
-            app.UseAuthentication();
-
-            app.UseAuthorization();
+            app.UseCookiePolicy();
+            app.UseStaticFiles();
 
             app.UseEndpoints(endpoints =>
             {
