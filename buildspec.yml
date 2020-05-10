@@ -6,8 +6,10 @@ phases:
       dotnet: 3.1
   build:
     commands:
-      - dotnet restore
-      - dotnet build
+      - dotnet build -c Release
+  build:
+    commands:
+      - dotnet test
 artifacts:
   files:
     - .\bin\Release\netcoreapp3.1\*
