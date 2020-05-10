@@ -7,8 +7,6 @@ phases:
   build:
     commands:
       - dotnet build -c Release
-  build:
-    commands:
       - dotnet test -c Release
 artifacts:
   files:
