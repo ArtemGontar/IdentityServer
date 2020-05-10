@@ -23,8 +23,8 @@ namespace IdentityServer.Controllers
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _interaction = interaction;
             _accountOptions = accountOptions.Value;
+            _interaction = interaction;
         }
         [HttpGet]
         public async Task<IActionResult> Login(string returnUrl = null)

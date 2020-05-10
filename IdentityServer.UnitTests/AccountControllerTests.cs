@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.Extensions.Options;
 using Moq;
 using Shared.Identity;
 using System;
@@ -23,12 +24,13 @@ namespace IdentityServer.UnitTests
         private readonly AccountController _accountController;
         private Mock<FakeUserManager> _mockUserManager;
         private Mock<FakeSignInManager> _mockSignInManager;
+        private Mock<IOptions<AccountOptions>> _mockOptions;
         public AccountControllerTests()
         {
             _mockSignInManager = new Mock<FakeSignInManager>();
             _mockUserManager = new Mock<FakeUserManager>();
-
-            _accountController = new AccountController(_mockUserManager.Object, _mockSignInManager.Object, null, null);
+            _mockOptions = new Mock<IOptions<AccountOptions>>();
+            _accountController = new AccountController(_mockUserManager.Object, _mockSignInManager.Object, _mockOptions.Object, null);
         }
 
         [Fact]
@@ -155,7 +157,9 @@ namespace IdentityServer.UnitTests
                 .ReturnsAsync(IdentityResult.Success);
             _mockUserManager.Setup(x => x.AddClaimAsync(It.IsAny<ApplicationUser>(), It.IsAny<Claim>()))
                 .ReturnsAsync(IdentityResult.Success);
-            
+            _mockUserManager.Setup(x => x.AddToRoleAsync(It.IsAny<ApplicationUser>(), It.IsAny<string>()))
+                .ReturnsAsync(IdentityResult.Success);
+
             _mockSignInManager.Setup(x => x.SignInAsync(It.IsAny<ApplicationUser>(), It.IsAny<bool>(), null));
 
             //Act
