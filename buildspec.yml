@@ -9,7 +9,7 @@ phases:
       - dotnet build -c Release
   build:
     commands:
-      - dotnet test
+      - dotnet test -c Release
 artifacts:
   files:
     - .\bin\Release\netcoreapp3.1\*
