@@ -34,9 +34,4 @@
     <ProjectReference Include="..\..\Shared\Shared.Identity\Shared.Identity.csproj" />
     <ProjectReference Include="..\..\Shared\Shared.Persistence.MySql\Shared.Persistence.MySql.csproj" />
   </ItemGroup>
-
-  <ItemGroup Condition="'$(Configuration)' == 'Release'">
-    <ProjectReference Include="Shared.Quiz.Identity" Version="1.0.0" />
-  </ItemGroup>
-
 </Project>
