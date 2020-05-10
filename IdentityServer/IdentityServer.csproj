@@ -24,8 +24,8 @@
 
 
   <ItemGroup Condition="'$(Configuration)' == 'Release'">
-    <PackageReference Include="Shared.Quiz.Identity" Version="1.0.0" />
-    <PackageReference Include="Shared.Quiz.Persistence.MySql" Version="1.0.0" />
+    <PackageReference Include="Shared.Quiz.Identity" Version="1.1.0" />
+    <PackageReference Include="Shared.Quiz.Persistence.MySql" Version="1.1.0" />
   </ItemGroup>
 
 
