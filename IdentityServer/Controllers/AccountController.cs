@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using IdentityServer4.Services;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.Extensions.Options;
 using Shared.Identity;
 
 namespace IdentityServer.Controllers
@@ -14,19 +15,23 @@ namespace IdentityServer.Controllers
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IIdentityServerInteractionService _interaction;
         private readonly UserManager<ApplicationUser> _userManager;
-        public AccountController(SignInManager<ApplicationUser> signInManager, 
-            UserManager<ApplicationUser> userManager,
+        private readonly AccountOptions _accountOptions;
+        public AccountController(UserManager<ApplicationUser> userManager,
+            SignInManager<ApplicationUser> signInManager,
+            IOptions<AccountOptions> accountOptions,
             IIdentityServerInteractionService interaction)
         {
-            _signInManager = signInManager;
             _userManager = userManager;
+            _signInManager = signInManager;
             _interaction = interaction;
+            _accountOptions = accountOptions.Value;
         }
         [HttpGet]
-        public async Task<IActionResult> Login(string returnUrl)
+        public async Task<IActionResult> Login(string returnUrl = null)
         {
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
-            return View(new LoginViewModel{ReturnUrl = returnUrl});
+
+            return View(new LoginViewModel{ReturnUrl = returnUrl ?? _accountOptions.SPAUrl });
         }
 
         [HttpPost]
@@ -36,23 +41,19 @@ namespace IdentityServer.Controllers
 
             if (user == null)
             {
-                return BadRequest("Wrong email or password");
+                return View(loginViewModel);
             }
 
             var result = await _signInManager.PasswordSignInAsync(loginViewModel.Login, loginViewModel.Password, false, false);
-
+            
             if (result.Succeeded)
             {
                 return Redirect(loginViewModel.ReturnUrl);
             }
-            else if(result.IsLockedOut)
-            {
-                
-            }
             return View(loginViewModel);
         }
 
-        public IActionResult Register(string returnUrl)
+        public async Task<IActionResult> Register(string returnUrl)
         {
             return View(new RegisterViewModel { ReturnUrl = returnUrl });
         }
@@ -64,17 +65,31 @@ namespace IdentityServer.Controllers
             {
                 return View(registerViewModel);
             }
-            var user = new ApplicationUser()
+            
+            var user = await _userManager.FindByEmailAsync(registerViewModel.Login);
+            if (user != null)
+            {
+                return View(registerViewModel);
+            }
+
+            user = new ApplicationUser()
             {
                 Email = registerViewModel.Login,
                 UserName = registerViewModel.Login
             };
+            
             var result = await _userManager.CreateAsync(user, registerViewModel.Password);
-
             if (result.Succeeded)
             {
                 await _userManager.AddClaimAsync(user, new Claim("userName", user.UserName));
                 await _userManager.AddClaimAsync(user, new Claim("email", user.Email));
+                var identityRoleResult = await _userManager.AddToRoleAsync(user, SystemRoles.ClientRoleName);
+                if (!identityRoleResult.Succeeded)
+                {
+                    return BadRequest(
+                        $"System Role of User with email '{user.Email}' not added.");
+                }
+
                 //await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("role", Roles.User));
                 await _signInManager.SignInAsync(user, false);
                 

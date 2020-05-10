@@ -12,6 +12,7 @@ using IdentityServer.Data;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using IdentityServer.Models;
 
 namespace IdentityServer
 {
@@ -29,7 +30,7 @@ namespace IdentityServer
         {
             var migrationAssembly = typeof(Startup).Assembly.GetName().Name;
             var connectionString = Configuration["ConnectionString"];
-
+            services.Configure<AccountOptions>(Configuration);
             services.AddDbContext<ApplicationDbContext>(builder => builder.UseMySql(connectionString, m =>
             {
                 m.MigrationsAssembly(migrationAssembly);
