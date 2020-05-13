@@ -26,6 +26,18 @@ namespace IdentityServer.Data
             {
                 var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
+                var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<ApplicationRole>>();
+
+                foreach (var role in GetSystemRoles())
+                {
+                    var existingEntity = roleManager.FindByNameAsync(role.Name).Result;
+
+                    if (existingEntity == null)
+                    {
+                        await roleManager.CreateAsync(role);
+                    }
+                }
+
                 var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
                 foreach (var pair in GetTestSystemUsersWithRoles())
                 {
@@ -44,6 +56,24 @@ namespace IdentityServer.Data
             }
         }
 
+        public static IEnumerable<ApplicationRole> GetSystemRoles()
+        {
+            return new List<ApplicationRole>() {
+                new ApplicationRole(){
+                    Name = SystemRoles.AdminRoleName
+                },
+                new ApplicationRole(){
+                    Name = SystemRoles.ProjectManagerRoleName
+                },
+                new ApplicationRole(){
+                    Name = SystemRoles.ModeratorRoleName
+                },
+                new ApplicationRole(){
+                    Name = SystemRoles.ClientRoleName
+                },
+            };
+        }
+
         public static Dictionary<ApplicationUser, string> GetTestSystemUsersWithRoles()
         {
             var clientUser = new ApplicationUser()
@@ -56,7 +86,7 @@ namespace IdentityServer.Data
             return new Dictionary<ApplicationUser, string>()
             {
                 {
-                    clientUser, "Client"
+                    clientUser, SystemRoles.ClientRoleName
                 },
             };
         }

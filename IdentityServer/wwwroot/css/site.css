@@ -8,6 +8,25 @@
     height: 100vh;
 }
 
+.authorization__form__container .error {
+    padding-right: 15px;
+    animation-name: appearance;
+    animation-duration: .3s;
+    animation-iteration-count: initial;
+}
+
+.authorization__form__container .error__image,
+.wrapper__label .info__icon {
+    width: 14px;
+    height: 14px;
+    margin-right: 5px;
+}
+
+.authorization__form__container .error__message {
+    color: #a31e1e;
+    font-size: 20px;
+}
+
 .authorization__form {
     width: 600px;
     height: 450px;

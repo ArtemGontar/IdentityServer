@@ -1,5 +1,6 @@
 ﻿using IdentityModel;
 using IdentityServer4.Models;
+using Shared.Identity;
 using System.Collections.Generic;
 
 namespace IdentityServer

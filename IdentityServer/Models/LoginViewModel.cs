@@ -13,5 +13,6 @@ namespace IdentityServer.Models
 
 
         public string ReturnUrl { get; set; }
+
     }
 }

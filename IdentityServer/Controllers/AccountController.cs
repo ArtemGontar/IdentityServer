@@ -37,10 +37,16 @@ namespace IdentityServer.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel loginViewModel)
         {
+            if(!ModelState.IsValid)
+            {
+                TempData["error"] = "Login or Password incorrect";
+                return View(loginViewModel);
+            }
             var user = await _userManager.FindByEmailAsync(loginViewModel.Login);
 
             if (user == null)
             {
+                TempData["error"] = "Login or Password incorrect";
                 return View(loginViewModel);
             }
 
@@ -50,6 +56,9 @@ namespace IdentityServer.Controllers
             {
                 return Redirect(loginViewModel.ReturnUrl);
             }
+
+            TempData["error"] = "Login or Password incorrect";
+
             return View(loginViewModel);
         }
 
@@ -63,12 +72,14 @@ namespace IdentityServer.Controllers
         {
             if (!ModelState.IsValid)
             {
+                TempData["error"] = "Fields typed incorrect";
                 return View(registerViewModel);
             }
             
             var user = await _userManager.FindByEmailAsync(registerViewModel.Login);
             if (user != null)
             {
+                TempData["error"] = "User with this login already exist";
                 return View(registerViewModel);
             }
 
@@ -96,6 +107,7 @@ namespace IdentityServer.Controllers
                 return Redirect(registerViewModel.ReturnUrl);
             }
 
+            TempData["error"] = "Registr failed";
             return View(registerViewModel);
         }
 
