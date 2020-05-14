@@ -11,7 +11,9 @@ namespace IdentityServer
         {
             return new List<ApiResource>()
             {
-                new ApiResource("QuizApi")
+                new ApiResource("QuizApi", "Quiz API"),
+                new ApiResource("UserApi", "User API"),
+                new ApiResource("StatisticApi", "Statistic API")
             };
         }
 
@@ -20,7 +22,23 @@ namespace IdentityServer
             return new List<IdentityResource>()
             {
                 new IdentityResources.OpenId(),
-                new IdentityResources.Profile()
+                new IdentityResources.Profile(),
+                new IdentityResource
+                {
+                    Name = "role",
+                    UserClaims =
+                    {
+                        "role"
+                    }
+                },
+                new IdentityResource
+                {
+                    Name = "userId",
+                    UserClaims =
+                    {
+                        "userId"
+                    }
+                }
             };
         }
 
@@ -28,30 +46,6 @@ namespace IdentityServer
         {
             return new List<Client>()
             {
-                new Client()
-                {
-                    ClientId = "client_id",
-                    ClientSecrets = {new Secret("client_secret".ToSha256())},
-                    AllowedGrantTypes = GrantTypes.ClientCredentials,
-                    AllowedScopes =
-                    {
-                        "QuizApi"
-                    }
-                },
-                new Client()
-                {
-                    ClientId = "my_client_id",
-                    ClientSecrets = {new Secret("my_client_secret".ToSha256())},
-                    AllowedGrantTypes = GrantTypes.Code,
-                    RedirectUris = { "https://localhost:6002/signin-oidc", "https://localhost:5002/signin-oidc" },
-                    AllowedScopes =
-                    {
-                        //"QuizApi",
-                        IdentityServer4.IdentityServerConstants.StandardScopes.OpenId,
-                        IdentityServer4.IdentityServerConstants.StandardScopes.Profile
-                    },
-                    RequireConsent = false
-                },
                 new Client {
                     RequireConsent = false,
                     ClientId = "angular_spa",
@@ -61,10 +55,23 @@ namespace IdentityServer
                     {
                         IdentityServer4.IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServer4.IdentityServerConstants.StandardScopes.Profile,
+                        "role",
+                        "userId",
+                        "QuizApi",
+                        "UserApi",
+                        "StatisticApi"
                     },
-                    RedirectUris = {"http://localhost:4200/auth-callback"},
-                    PostLogoutRedirectUris = {"http://localhost:4200/chapters"},
-                    AllowedCorsOrigins = {"http://localhost:4200"},
+                    AlwaysIncludeUserClaimsInIdToken = true,
+                    RedirectUris = {
+                        "http://localhost:4200/auth-callback"
+                    },
+                    PostLogoutRedirectUris = 
+                    {
+                        "http://localhost:4200/chapters"
+                    },
+                    AllowedCorsOrigins = {
+                        "http://localhost:4200"
+                    },
                     AllowAccessTokensViaBrowser = true,
                     AccessTokenLifetime = 3600
                 }

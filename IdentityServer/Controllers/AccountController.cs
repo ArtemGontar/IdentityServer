@@ -101,7 +101,8 @@ namespace IdentityServer.Controllers
                         $"System Role of User with email '{user.Email}' not added.");
                 }
 
-                //await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("role", Roles.User));
+                await _userManager.AddClaimAsync(user, new Claim("role", SystemRoles.ClientRoleName));
+                await _userManager.AddClaimAsync(user, new Claim("userId", user.Id.ToString()));
                 await _signInManager.SignInAsync(user, false);
                 
                 return Redirect(registerViewModel.ReturnUrl);
