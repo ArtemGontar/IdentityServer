@@ -67,7 +67,7 @@ namespace IdentityServer
                     },
                     PostLogoutRedirectUris = 
                     {
-                        "http://localhost:4200/chapters"
+                        "http://localhost:4200"
                     },
                     AllowedCorsOrigins = {
                         "http://localhost:4200"
