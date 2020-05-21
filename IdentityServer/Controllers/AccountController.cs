@@ -62,7 +62,7 @@ namespace IdentityServer.Controllers
             return View(loginViewModel);
         }
 
-        public async Task<IActionResult> Register(string returnUrl)
+        public IActionResult Register(string returnUrl)
         {
             return View(new RegisterViewModel { ReturnUrl = returnUrl });
         }
