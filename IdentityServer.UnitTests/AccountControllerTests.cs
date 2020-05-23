@@ -84,7 +84,7 @@ namespace IdentityServer.UnitTests
         }
 
         [Fact]
-        public async Task PostLogin_CorrectLoginAndPassword_NotFoundUser_ShouldBadRequest()
+        public async Task PostLogin_CorrectLoginAndPassword_NotFoundUser_ShouldTempDataError()
         {
             //Arrange
             var loginViewModel = new LoginViewModel()
@@ -96,15 +96,20 @@ namespace IdentityServer.UnitTests
 
             _mockUserManager.Setup(x => x.FindByEmailAsync(It.IsAny<string>()))
                 .ReturnsAsync(default(ApplicationUser));
+
+            var httpContext = new DefaultHttpContext();
+            var tempData = new TempDataDictionary(httpContext, Mock.Of<ITempDataProvider>());
+            _accountController.TempData = tempData;
             //Act
             var result = (ViewResult)await _accountController.Login(loginViewModel);
 
             //Assert
             Assert.Equal(typeof(LoginViewModel).FullName, result.Model.ToString());
+            Assert.Equal("Login or Password incorrect", result.TempData["error"]);
         }
 
         [Fact]
-        public async Task PostLogin_CorrectLoginAndPassword_WrongLoginOrPassword_ShouldLogined()
+        public async Task PostLogin_CorrectLoginAndPassword_WrongLoginOrPassword_ShouldTempDataError()
         {
             //Arrange
             var loginViewModel = new LoginViewModel()
@@ -119,21 +124,25 @@ namespace IdentityServer.UnitTests
             _mockSignInManager.Setup(x => x.PasswordSignInAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>()))
                 .ReturnsAsync(Microsoft.AspNetCore.Identity.SignInResult.Failed);
 
+            var httpContext = new DefaultHttpContext();
+            var tempData = new TempDataDictionary(httpContext, Mock.Of<ITempDataProvider>());
+            _accountController.TempData = tempData;
             //Act
             var result = (ViewResult)await _accountController.Login(loginViewModel);
 
             //Assert
             Assert.Equal(typeof(LoginViewModel).FullName, result.Model.ToString());
+            Assert.Equal("Login or Password incorrect", result.TempData["error"]);
         }
 
         [Fact]
-        public async Task GetRegisterPage_ShouldResturnsPage()
+        public async void GetRegisterPage_ShouldResturnsPage()
         {
             //Arrange
             var returnUrl = "http://localhost:4200";
             
             //Act
-            var result = (ViewResult)await _accountController.Register(returnUrl);
+            var result = (ViewResult)_accountController.Register(returnUrl);
 
             //Assert
             Assert.Equal(typeof(RegisterViewModel).FullName, result.Model.ToString());
