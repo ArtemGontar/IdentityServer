@@ -13,6 +13,10 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using IdentityServer.Models;
+using OpenTracing;
+using Jaeger;
+using Jaeger.Samplers;
+using OpenTracing.Util;
 
 namespace IdentityServer
 {
@@ -74,7 +78,22 @@ namespace IdentityServer
 
             services.AddControllersWithViews();
 
+            services.AddOpenTracing();
 
+            services.AddSingleton<ITracer>(serviceProvider =>
+            {
+                string serviceName = serviceProvider.GetRequiredService<IWebHostEnvironment>().ApplicationName;
+
+                // This will log to a default localhost installation of Jaeger.
+                var tracer = new Tracer.Builder(serviceName)
+                    .WithSampler(new ConstSampler(true))
+                    .Build();
+
+                // Allows code that can't use DI to also access the tracer.
+                GlobalTracer.Register(tracer);
+
+                return tracer;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
