@@ -17,6 +17,7 @@ using OpenTracing;
 using Jaeger;
 using Jaeger.Samplers;
 using OpenTracing.Util;
+using Serilog;
 
 namespace IdentityServer
 {
@@ -33,6 +34,7 @@ namespace IdentityServer
         public void ConfigureServices(IServiceCollection services)
         {
             var migrationAssembly = typeof(Startup).Assembly.GetName().Name;
+            Log.Information(Configuration["ConnectionString"]);
             var connectionString = Configuration["ConnectionString"];
             services.Configure<AccountOptions>(Configuration);
             services.AddDbContext<ApplicationDbContext>(builder => builder.UseMySql(connectionString, m =>

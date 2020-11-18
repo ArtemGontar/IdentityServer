@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Extensions.Options;
 using Moq;
+using OpenTracing;
 using Shared.Identity;
 using System;
 using System.Security.Claims;
@@ -25,12 +26,14 @@ namespace IdentityServer.UnitTests
         private Mock<FakeUserManager> _mockUserManager;
         private Mock<FakeSignInManager> _mockSignInManager;
         private Mock<IOptions<AccountOptions>> _mockOptions;
+        private Mock<ITracer> _tracer;
         public AccountControllerTests()
         {
             _mockSignInManager = new Mock<FakeSignInManager>();
             _mockUserManager = new Mock<FakeUserManager>();
             _mockOptions = new Mock<IOptions<AccountOptions>>();
-            _accountController = new AccountController(_mockUserManager.Object, _mockSignInManager.Object, _mockOptions.Object, null);
+
+            _accountController = new AccountController(_mockUserManager.Object, _mockSignInManager.Object, _mockOptions.Object, null, _tracer.Object);
         }
 
         [Fact]
