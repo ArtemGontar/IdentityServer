@@ -22,6 +22,7 @@
                 </clipPath>
             </defs>
         </svg>
+
         <form class="authorization__form" asp-controller="Account" asp-action="Login" method="post">
             <input type="hidden" asp-for="ReturnUrl" />
             <div class="authorization__form-input input__nickname">
@@ -39,4 +40,11 @@
                 <a class="authorization_link" asp-controller="Account" asp-action="Register" asp-route-returnUrl="@Model.ReturnUrl">Register</a>
             </div>
         </form>
+        @if (TempData["error"] != null)
+        {
+            <div class="error">
+                <img class="error__image" src="~/img/error.svg">
+                <scope class="error__message">@TempData["error"]</scope>
+            </div>
+        }
     </div>

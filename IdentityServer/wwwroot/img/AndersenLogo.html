@@ -1,11 +1,4 @@
-﻿@model IdentityServer.Models.RegisterViewModel
-
-@{
-    Layout = "_Layout";
-}
-
-    <div class="authorization__form__container">
-        <svg width="140" height="43" viewBox="0 0 140 43" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg width="140" height="43" viewBox="0 0 140 43" fill="none" xmlns="http://www.w3.org/2000/svg">
             <g clip-path="url(#clip0)">
                 <path d="M44.3642 27.5587L41.3672 41.7732H44.7814L46.2998 34.6275C46.6043 33.112 47.084 32.0001 47.7389 31.292C48.0674 30.9406 48.4713 30.6635 48.9221 30.4804C49.3729 30.2973 49.8596 30.2126 50.3477 30.2323C51.1012 30.2323 51.6751 30.4281 52.0694 30.8199C52.4637 31.2116 52.6609 31.782 52.6609 32.5312C52.6605 32.8159 52.6428 33.1004 52.6081 33.3831C52.5711 33.6773 52.5218 33.9706 52.4602 34.2631L50.9551 41.7706H54.504L55.7952 35.31C55.9572 34.5334 56.0804 33.8492 56.1649 33.2573C56.2355 32.8233 56.2779 32.3854 56.2917 31.9462C56.2917 30.4068 55.841 29.2522 54.9397 28.4824C54.0384 27.7127 52.6978 27.327 50.9181 27.3253C50.2275 27.322 49.5436 27.4564 48.9086 27.7204C48.2392 28.0076 47.6303 28.413 47.1131 28.916L47.422 27.5587H44.3642Z" fill="black"></path>
                 <path d="M71.3507 41.7729L75.1135 22.958H71.6464L70.3816 29.393C69.7756 28.7095 69.023 28.163 68.1767 27.7919C67.315 27.4239 66.3824 27.2384 65.4411 27.248C64.1995 27.2356 62.9722 27.5062 61.8578 28.0383C60.7683 28.5658 59.8275 29.3434 59.1169 30.3039C58.5828 31.0126 58.1634 31.7965 57.8732 32.6285C57.5982 33.4415 57.46 34.2923 57.4639 35.1481C57.4639 37.2332 58.1003 38.9198 59.3731 40.2078C60.6458 41.4958 62.3041 42.1398 64.3479 42.1398C65.0617 42.149 65.7715 42.0352 66.4445 41.8037C67.0774 41.5746 67.6571 41.2257 68.1503 40.7774L67.9628 41.7601L71.3507 41.7729ZM68.3457 31.3302C68.7075 31.6999 68.9897 32.1362 69.1756 32.6134C69.3615 33.0906 69.4474 33.599 69.4283 34.1089C69.4653 35.4092 68.9805 36.6725 68.0764 37.6317C67.6652 38.0877 67.1572 38.4515 66.5874 38.6982C66.0176 38.945 65.3995 39.0687 64.7757 39.0609C64.2544 39.0819 63.7344 38.9961 63.2495 38.8091C62.7645 38.6221 62.3255 38.3381 61.9608 37.9756C61.2567 37.252 60.9046 36.3001 60.9046 35.1198C60.8864 34.4841 60.9979 33.8513 61.2327 33.2576C61.4675 32.664 61.8208 32.1214 62.2724 31.6612C62.691 31.2088 63.2034 30.8479 63.776 30.602C64.3486 30.3561 64.9683 30.2309 65.5942 30.2346C66.1063 30.2191 66.616 30.3087 67.0901 30.4975C67.5642 30.6863 67.992 30.97 68.3457 31.3302Z" fill="black"></path>
@@ -22,31 +15,4 @@
                     <rect width="140" height="43" fill="white"></rect>
                 </clipPath>
             </defs>
-        </svg>
-        <form class="authorization__form" asp-controller="Account" asp-action="Register" method="post">
-            <input type="hidden" asp-for="ReturnUrl" />
-            <div class="authorization__form-input input__nickname">
-                <label>Login</label>
-                <input asp-for="Login" />
-            </div>
-            <div class="authorization__form-input input__password">
-                <label>Password</label>
-                <input asp-for="Password" />
-            </div>
-            <div class="authorization__form-input input__password">
-                <label>ConfirmPassword</label>
-                <input asp-for="ConfirmPassword" />
-            </div>
-            <div class="authorization__form-input input__submit">
-                <input type="submit" value="Sign up" />
-            </div>
-            <a class="authorization_link" asp-controller="Account" asp-action="Login" asp-route-returnUrl="@Model.ReturnUrl">Back to Login</a>
-        </form>
-        @if (TempData["error"] != null)
-        {
-            <div class="error">
-                <img class="error__image" src="~/img/error.svg">
-                <scope class="error__message">@TempData["error"]</scope>
-            </div>
-        }
-    </div>
+</svg>

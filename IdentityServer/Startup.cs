@@ -7,7 +7,17 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Shared.Identity;
 using System;
+using HealthChecks.UI.Client;
 using IdentityServer.Data;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
+using IdentityServer.Models;
+using OpenTracing;
+using Jaeger;
+using Jaeger.Samplers;
+using OpenTracing.Util;
+using Serilog;
 
 namespace IdentityServer
 {
@@ -24,8 +34,9 @@ namespace IdentityServer
         public void ConfigureServices(IServiceCollection services)
         {
             var migrationAssembly = typeof(Startup).Assembly.GetName().Name;
+            Log.Information(Configuration["ConnectionString"]);
             var connectionString = Configuration["ConnectionString"];
-
+            services.Configure<AccountOptions>(Configuration);
             services.AddDbContext<ApplicationDbContext>(builder => builder.UseMySql(connectionString, m =>
             {
                 m.MigrationsAssembly(migrationAssembly);
@@ -46,12 +57,11 @@ namespace IdentityServer
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.ConfigureApplicationCookie(config =>
+            services.Configure<CookiePolicyOptions>(options =>
             {
-                config.Cookie.Name = "IdentityServer.Cookie";
-                config.LoginPath = "/Account/Login";
+                options.MinimumSameSitePolicy = SameSiteMode.Lax;
             });
-              
+
             services.AddIdentityServer()
                 .AddAspNetIdentity<ApplicationUser>()
                 .AddInMemoryApiResources(Config.GetApiResources())
@@ -59,25 +69,33 @@ namespace IdentityServer
                 .AddInMemoryClients(Config.GetClients())
                 .AddDeveloperSigningCredential();
 
-            services.AddAuthentication(config =>
-                {
-                    config.DefaultScheme = "Cookie";
-                    config.DefaultChallengeScheme = "oidc";
-                })
-                .AddCookie("Cookie")
-                .AddOpenIdConnect("oidc", options =>
-                {
-                    options.ClientId = "my_client_id";
-                    options.ClientSecret = "my_client_secret";
-                    options.SaveTokens = true;
-                    options.RequireHttpsMetadata = false;
-                    options.Authority = "https://localhost:5002";
-                    options.ResponseType = "code";
-                });
+            services.AddCors(options => 
+                options.AddPolicy("AllowAll", p => p.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()));
+
+            services.AddHealthChecks()
+                .AddCheck("self", () => HealthCheckResult.Healthy())
+                .AddMySql(connectionString, name: "DB");
 
             services.AddControllersWithViews();
 
+            services.AddOpenTracing();
 
+            services.AddSingleton<ITracer>(serviceProvider =>
+            {
+                string serviceName = serviceProvider.GetRequiredService<IWebHostEnvironment>().ApplicationName;
+
+                // This will log to a default localhost installation of Jaeger.
+                var tracer = new Tracer.Builder(serviceName)
+                    .WithSampler(new ConstSampler(true))
+                    .Build();
+
+                // Allows code that can't use DI to also access the tracer.
+                GlobalTracer.Register(tracer);
+
+                return tracer;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -91,17 +109,34 @@ namespace IdentityServer
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseCors("AllowAll");
+
             app.UseRouting();
 
+            app.UseIdentityServer();
+            app.UseCookiePolicy();
             app.UseStaticFiles();
 
-            app.UseIdentityServer();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapDefaultControllerRoute();
 
-            app.UseAuthentication();
+                endpoints.MapHealthChecks("/hc", new HealthCheckOptions
+                {
+                    Predicate = _ => true,
+                    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                });
 
-            app.UseAuthorization();
+                endpoints.MapHealthChecks("/liveness", new HealthCheckOptions
+                {
+                    Predicate = r => r.Name.Contains("self")
+                });
 
-            app.UseEndpoints(endpoints => { endpoints.MapDefaultControllerRoute(); });
+                endpoints.MapHealthChecks("/readiness", new HealthCheckOptions
+                {
+                    Predicate = r => !r.Name.Contains("self")
+                });
+            });
         }
     }
 }
