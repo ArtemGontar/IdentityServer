@@ -1,0 +1,13 @@
+apiVersion: v2
+name: identity-server
+version: 0.0.1
+description: Identity provider
+type: application
+# dependencies:
+#   - name: mysql
+#     version: 3.2.1
+#     repository: https://another.example.com/charts
+maintainers:
+  - name: Artsiom Hontar
+    email: artemgontar16@gmail.com
+appVersion: 0.0.1

@@ -139,11 +139,11 @@ namespace IdentityServer.UnitTests
         }
 
         [Fact]
-        public async void GetRegisterPage_ShouldResturnsPage()
+        public void GetRegisterPage_ShouldResturnsPage()
         {
             //Arrange
             var returnUrl = "http://localhost:4200";
-            
+
             //Act
             var result = (ViewResult)_accountController.Register(returnUrl);
 

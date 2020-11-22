@@ -20,7 +20,6 @@ namespace IdentityServer.Data
                 applicationContext.Database.Migrate();
             }
         }
-
         public static async Task InitializeDatabase(IApplicationBuilder app, IConfiguration configuration)
         {
             using (var scope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
